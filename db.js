@@ -101,7 +101,7 @@ class Db {
       ];
       this.Review.aggregate(agg)
         .then(averageRatings => {
-          this.Review.find({productId: Number(productId)}).limit(20)
+          this.Review.find({ productId: Number(productId) }).limit(20)
             .then(reviews => {
               db.close();
               callback({
@@ -117,17 +117,61 @@ class Db {
 
   getSingleReview(productId, reviewId, callback) {
     console.log('getting single review ' + reviewId + ' from product ' + productId);
-    this.mongoose.connect('mongodb://localhost/vikea', { useNewUrlParser: true, useUnifiedTopology: true});
+    this.mongoose.connect('mongodb://localhost/vikea', { useNewUrlParser: true, useUnifiedTopology: true });
     const db = this.mongoose.connection;
     db.on('error', console.error.bind(console, 'connection error:'));
     db.once('open', () => {
-      this.Review.find({productId: Number(productId), reviewId: Number(reviewId)})
+      this.Review.find({ productId: Number(productId), reviewId: Number(reviewId) })
         .then(review => {
           db.close();
           callback(review);
         });
     });
   }
+
+  // New Database Methods
+
+  addReview(productId, review, callback) {
+    console.log(`adding review for product ${productId}`);
+    this.mongoose.connect('mongodb://localhost/vikea', { useNewUrlParser: true, useUnifiedTopology: true });
+    const db = this.mongoose.connection;
+    db.on('error', console.error.bind(console, 'connection error:'));
+    db.once('open', () => {
+      this.Review.find({}).sort({ 'reviewId': -1 }).limit(1)
+        .then(lastReview => {
+          let newReviewId = lastReview[0].reviewId + 1;
+          review = review[0];
+
+          const newReview = {
+            reviewId: newReviewId,
+            productId: productId,
+            overall: review.overall,
+            easeOfAssembly: review.easeOfAssembly,
+            valueForMoney: review.valueForMoney,
+            productQuality: review.productQuality,
+            appearance: review.appearance,
+            worksAsExpected: review.worksAsExpected,
+            recommended: review.recommended,
+            title: review.title,
+            reviewText: review.reviewText,
+            reviewerName: review.reviewerName,
+            reviewerId: review.reviewerId,
+            date: new Date()
+          }
+
+          this.Review.create(newReview)
+            .then(newReview => {
+              console.log('finished adding new review');
+              db.close();
+              callback(newReview);
+            });
+        });
+
+    });
+
+
+  }
+
 }
 
 module.exports = Db;

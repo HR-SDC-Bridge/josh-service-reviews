@@ -12,8 +12,8 @@
 ## Table of Contents
 
 1. [Usage](#Usage)
-1. [Requirements](#requirements)
-1. [Development](#development)
+2. [Requirements](#requirements)
+3. [Development](#development)
 
 ## Usage
 
@@ -45,7 +45,7 @@
 ```
  - For a summary: GET /api/reviews/:itemID
  - example responses based on item at https://www.ikea.com/us/en/p/hemnes-2-drawer-chest-black-brown-50242619/:
-```JSON 
+```JSON
 
 {
   "itemID": 1,
@@ -137,7 +137,7 @@
 ```
 
  - For a single review: GET /api/reviews/:itemID/details/:reviewID
- - example response: 
+ - example response:
 ```JSON
 
 {
@@ -156,6 +156,17 @@
 }
 
 ```
+
+## API
+
+### Create
+
+Endpoint | Type | Expected input
+--- | --- | ---
+'/api/reviews/:itemID/details' | POST | [{ "overall": 3.7, "easeOfAssembly": 3.7, "valueForMoney": 3.3, "productQuality": 2.6, "appearance": 3.2, "worksAsExpected": 3.7, "recommended": true, "title": "Testing adding new document", "reviewText": "Testing review text", "reviewerName": "TEST", "reviewerId": 666 }]
+
+
+
 
 ## Requirements
 

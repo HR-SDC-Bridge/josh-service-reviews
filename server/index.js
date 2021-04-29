@@ -5,6 +5,9 @@ const path = require('path');
 const cors = require('cors');
 const app = express();
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use(express.static(__dirname + '/../public'));
 app.use(cors());
 
@@ -39,6 +42,31 @@ app.get('/api/reviews/:itemID/details/:reviewID', (req, res, next) => {
 
 app.get('/:productID', (req, res, next) => {
   res.sendFile(path.resolve(__dirname, '../', 'public/test.html'));
+});
+
+
+// Add a new review
+app.post('/api/reviews/:itemID/details', (req, res, next) => {
+  console.log('Adding one single review');
+
+  let review = req.body;
+
+  db.addReview(req.params.itemID, review, review => {
+    res.send(review);
+  });
+
+});
+
+// Update - Put or patch?
+app.patch('/api/reviews/:itemID/details/:reviewID', (req, res, next) => {
+  console.log('Patching one single review');
+
+});
+
+// Delete
+app.delete('/api/reviews/:itemID/details/:reviewID', (req, res, next) => {
+  console.log('Deleting one single review');
+
 });
 
 app.listen(3000, () => console.log('listening'));

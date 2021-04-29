@@ -8,7 +8,7 @@
     "node": ">=6.13.0"
   },
   "scripts": {
-    "start": "node server/index.js",
+    "start": "nodemon server/index.js",
     "react-dev": "webpack watch",
     "seed": "node run-seed.js"
   },
@@ -16,6 +16,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "mongoose": "^5.11.18",
+    "nodemon": "^2.0.7",
     "react": "^17.0.1",
     "react-dom": "^17.0.1"
   },
@@ -25,11 +26,8 @@
     "babel-loader": "^8.2.2",
     "css-loader": "^5.2.2",
     "eslint-config-hackreactor": "github:reactorcore/eslint-config-hackreactor",
-<<<<<<< HEAD
     "jest": "^26.6.3",
-=======
     "style-loader": "^2.0.0",
->>>>>>> 62b7983a67ddab55f698a3ff6a82bb7a0a493526
     "webpack": "^5.26.0",
     "webpack-cli": "^4.6.0"
   }

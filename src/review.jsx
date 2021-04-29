@@ -18,13 +18,13 @@ const toggleReviewModal = function () {
 };
 
 const blankAverageRatings = {
-	number: 0,
-	overall: 0,
-	easeOfAssembly: 0,
-	valueForMoney: 0,
-	productQuality: 0,
-	appearance: 0,
-	worksAsExpected: 0
+  number: 0,
+  overall: 0,
+  easeOfAssembly: 0,
+  valueForMoney: 0,
+  productQuality: 0,
+  appearance: 0,
+  worksAsExpected: 0
 };
 
 class Review extends React.Component {
@@ -85,27 +85,27 @@ class Review extends React.Component {
       fetch(`/api/reviews/${match[1]}/details`)
         .then(res => res.json())
         .then(json => {
-		if (!json.averageRatings) {
-			json.averageRatings = blankAverageRatings;
-		}
+          if (!json.averageRatings) {
+            json.averageRatings = blankAverageRatings;
+          }
 
-		this.setState(json);
-	});
+          this.setState(json);
+        });
     }
   }
 
 
   render() {
-    const round = n => Math.round(n*10)/10;
+    const round = n => Math.round(n * 10) / 10;
     return (
       <div className='review'>
         <div className='toggle' onClick={toggleReviewModal}>
           <div>Reviews</div>
           <Stars count={this.state.averageRatings.overall} /> <span className="weak">({this.state.averageRatings.number})</span>
         </div>
-        <div className='modal-wrapper' id='review-modal-wrapper' style={{display: 'none'}}>
+        <div className='modal-wrapper' id='review-modal-wrapper' style={{ display: 'none' }}>
           <div className='review-modal'>
-    	    <div id='close-box'><div className='close' onClick={toggleReviewModal}>X</div></div>
+            <div id='close-box'><div className='close' onClick={toggleReviewModal}>X</div></div>
             <h2>Reviews</h2>
             <h3 className='overall'>{round(this.state.averageRatings.overall)}</h3>
             <Stars count={this.state.averageRatings.overall} />
