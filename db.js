@@ -166,12 +166,24 @@ class Db {
               callback(newReview);
             });
         });
-
     });
-
-
   }
 
+  deleteReview(reviewId, callback) {
+    console.log(`deleting review ${reviewId}`);
+    this.mongoose.connect('mongodb://localhost/vikea', { useNewUrlParser: true, useUnifiedTopology: true });
+    const db = this.mongoose.connection;
+    db.on('error', console.error.bind(console, 'connection error:'));
+    db.once('open', () => {
+      console.log(reviewId);
+      this.Review.deleteOne({"reviewId": reviewId })
+        .then(result => {
+              console.log('finished deleting review');
+              db.close();
+              callback(result);
+            });
+        });
+    };
 }
 
 module.exports = Db;
