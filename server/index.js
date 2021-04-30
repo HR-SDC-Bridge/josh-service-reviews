@@ -44,21 +44,27 @@ app.get('/:productID', (req, res, next) => {
   res.sendFile(path.resolve(__dirname, '../', 'public/test.html'));
 });
 
-app.post('/api/reviews/:itemID/details', (req, res, next) => {
-  console.log('Adding one single review');
+// Add Review
+app.post('/api/reviews/:itemID', (req, res, next) => {
+  console.log('adding new review');
   let review = req.body;
   db.addReview(req.params.itemID, review, review => {
     res.send(review);
   });
 });
 
-app.patch('/api/reviews/:itemID/details/:reviewID', (req, res, next) => {
-  console.log('Updating one single review');
-
+// Update Review
+app.put('/api/reviews/:reviewID', (req, res, next) => {
+  console.log('updating review');
+  let review = req.body;
+  db.updateReview(req.params.reviewID, review, review => {
+    res.send(review);
+  });
 });
 
+// Delete Review
 app.delete('/api/reviews/:reviewID', (req, res, next) => {
-  console.log('Deleting one single review');
+  console.log('deleting review');
   db.deleteReview(req.params.reviewID, review => {
     res.send(review);
   });

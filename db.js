@@ -161,13 +161,49 @@ class Db {
 
           this.Review.create(newReview)
             .then(newReview => {
-              console.log('finished adding new review');
+              console.log(`finished adding new review id ${newReviewId}`);
               db.close();
               callback(newReview);
+            })
+            .catch(err => {
+              console.log(`error creating new review in database,  ${err}`);
             });
         });
     });
   }
+
+  updateReview(reviewId, review, callback) {
+    console.log(`updating review ${reviewId}`);
+    this.mongoose.connect('mongodb://localhost/vikea', { useNewUrlParser: true, useUnifiedTopology: true });
+    const db = this.mongoose.connection;
+    db.on('error', console.error.bind(console, 'connection error:'));
+    db.once('open', () => {
+      this.Review.updateOne({ "reviewId": reviewId }, {
+        $set: {
+          overall: review[0].overall,
+          easeOfAssembly: review[0].easeOfAssembly,
+          valueForMoney: review[0].valueForMoney,
+          productQuality: review[0].productQuality,
+          appearance: review[0].appearance,
+          worksAsExpected: review[0].worksAsExpected,
+          recommended: review[0].recommended,
+          title: review[0].title,
+          reviewText: review[0].reviewText,
+          reviewerName: review[0].reviewerName,
+          reviewerId: review[0].reviewerId,
+          date: new Date()
+        }
+      })
+        .then(result => {
+          console.log(`finished updating review id ${reviewId}`);
+          db.close();
+          callback(result);
+        })
+        .catch(err => {
+          console.log(`error updating review  id ${reviewId} in database,  ${err}`);
+        });
+    });
+  };
 
   deleteReview(reviewId, callback) {
     console.log(`deleting review ${reviewId}`);
@@ -175,15 +211,17 @@ class Db {
     const db = this.mongoose.connection;
     db.on('error', console.error.bind(console, 'connection error:'));
     db.once('open', () => {
-      console.log(reviewId);
-      this.Review.deleteOne({"reviewId": reviewId })
+      this.Review.deleteOne({ "reviewId": reviewId })
         .then(result => {
-              console.log('finished deleting review');
-              db.close();
-              callback(result);
-            });
+          console.log(`finished deleting review id ${reviewId}`);
+          db.close();
+          callback(result);
+        })
+        .catch(err => {
+          console.log(`error deleting review id ${reviewId} in database,  ${err}`);
         });
-    };
+    });
+  };
 }
 
 module.exports = Db;

@@ -1,23 +1,25 @@
-# Viking Ikea "Vikea"
+# SDC Bridge IKEA Reviews Service
+Based on Viking IKEA Clone "Vikea"
 
 > This service will serve up all the reviews for the requested item.
+<br />
 
 ## Related Projects
 
-  - https://github.com/teamName/repo
-  - https://github.com/teamName/repo
-  - https://github.com/teamName/repo
-  - https://github.com/teamName/repo
+  - https://github.com/HR-SDC-Bridge
+
+<br />
 
 ## Table of Contents
 
-1. [Usage](#Usage)
+1. [API](#api)
 2. [Requirements](#requirements)
 3. [Development](#development)
 
-## Usage
+<br />
 
-> Basic API usage:
+## API
+### Read
  - For summaries of reviews for all items: GET /api/reviews
  - For pages use query param eg. GET /api/reviews?page=2
 ```JSON
@@ -157,15 +159,61 @@
 
 ```
 
-## API
-
 ### Create
 
-Endpoint | Type | Expected input
+Endpoint | Type | Behavior
 --- | --- | ---
-'/api/reviews/:itemID/details' | POST | [{ "overall": 3.7, "easeOfAssembly": 3.7, "valueForMoney": 3.3, "productQuality": 2.6, "appearance": 3.2, "worksAsExpected": 3.7, "recommended": true, "title": "Testing adding new document", "reviewText": "Testing review text", "reviewerName": "TEST", "reviewerId": 666 }]
+'/api/reviews/:itemID' | POST | Add a new review for specific item by ID
 
+ - Expected JSON input:
 
+```JSON
+{
+  "overall": 3.7,
+  "easeOfAssembly": 3.7,
+  "valueForMoney": 3.3,
+  "productQuality": 2.6,
+  "appearance": 3.2,
+  "worksAsExpected": 3.7,
+  "recommended": true,
+  "title": "Very versatile",
+  "reviewText": "Works very well in different rooms.",
+  "reviewerName": "Melissa Ryan",
+  "reviewerId": 666
+}
+```
+
+### Update
+
+Endpoint | Type | Behavior
+--- | --- | ---
+'/api/reviews/:reviewID' | PUT | Update a review by review ID
+
+- Expected JSON input:
+
+```JSON
+  {
+    "overall": 3.7,
+    "easeOfAssembly": 3.7,
+    "valueForMoney": 3.3,
+    "productQuality": 2.6,
+    "appearance": 3.2,
+    "worksAsExpected": 3.7,
+    "recommended": true,
+    "title": "OK at first but fell apart",
+    "reviewText": "It fell apart after I moved.",
+    "reviewerName": "Chloe Tan",
+    "reviewerId": 666
+  }
+```
+
+### Delete
+
+Endpoint | Type | Behavior
+--- | --- | ---
+'/api/reviews/:reviewID' | DELETE | Delete a review by review ID
+
+<br /><br />
 
 
 ## Requirements
