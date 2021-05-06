@@ -10,11 +10,12 @@
   "scripts": {
     "start": "nodemon server/index.js",
     "react-dev": "webpack watch",
-    "seed": "node run-seed.js"
+    "seed": "node run-seed-new.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "faker": "^5.5.3",
     "mongoose": "^5.11.18",
     "nodemon": "^2.0.7",
     "react": "^17.0.1",

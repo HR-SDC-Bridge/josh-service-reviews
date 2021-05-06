@@ -26,3 +26,6 @@ dist/
 
 public/bundle.js
 nohup.out
+
+# Large sample data file
+sampleData/
