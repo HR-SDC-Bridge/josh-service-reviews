@@ -1,6 +1,10 @@
 const Db = require('./db');
 const defaultDb = new Db();
+
 const fs = require('fs');
+const fileWriteStream = fs.createWriteStream('./sampleData/seed-data-large.csv');
+
+var scriptStart = Date.now();
 
 var swap = (arr, i, j) => {
   const temp = arr[i];
@@ -133,31 +137,38 @@ var generateReviewers = function () {
   return reviewers;
 };
 
-
-var generateReviews = function () {
+let generateReviews = async () => {
   var reviewId = 1;
-  //var reviews = [];
   var reviewers = generateReviewers();
-  for (var productId = 1; productId <= 10000000; productId++) {
+  for (var productId = 1; productId <= 1e7; productId++) {
     var randomThreshold = Math.pow(Math.random(), 2);
     var randomTry = Math.random();
     var shuffledReviewers = shuffleDeck(reviewers);
     var reviewer = 0;
-    while (randomTry > randomThreshold && reviewer < 5) {
-      //reviews.push(generateReview(productId, shuffledReviewers[reviewer]));
+    while (randomTry > randomThreshold && reviewer < shuffledReviewers.length) {
       let review = generateReview(productId, reviewId, shuffledReviewers[reviewer]);
-      let line = `${review.reviewId}, ${review.productId}, ${review.overall}, ${review.easeOfAssembly}, ${review.valueForMoney}, ${review.productQuality}, ${review.appearance}, ${review.worksAsExpected}, ${review.recommended}, ${review.title}, ${review.reviewText}, ${review.reviewerName}, ${review.reviewerId}, ${review.date} + \n`
-      fs.appendFileSync('./sampleData/original-seed-data.csv', line, err => {
-        if (err) {
-          console.error(err);
-          return;
-        }
-      });
+      let line = `${review.reviewId}, ${review.productId}, ${review.overall}, ${review.easeOfAssembly}, ${review.valueForMoney}, ${review.productQuality}, ${review.appearance}, ${review.worksAsExpected}, ${review.recommended}, ${review.title}, ${review.reviewText}, ${review.reviewerName}, ${review.reviewerId}, ${review.date} \n`;
       reviewId++;
       reviewer++;
       randomTry = Math.random();
+
+      const ableToWrite = fileWriteStream.write(line);
+      if (!ableToWrite) {
+        await new Promise(resolve => {
+          fileWriteStream.once('drain', resolve);
+        });
+      }
+
+      if (reviewId % 1000000 === 0) {
+        const minutes = ((Date.now() - scriptStart) / 1000) / 60;
+        console.log(`writing record ${reviewId}, minutes running: ${minutes.toFixed(2)}`);
+      }
     }
   }
+
+  const endTime = Date.now();
+  const totalTime = ((endTime - scriptStart) / 1000) / 60;
+  console.log(`finished writing to "./sampleData/seed-data-large.csv" in ${totalTime.toFixed(2)}`);
 };
 
-module.exports = generateReviews;
+generateReviews();

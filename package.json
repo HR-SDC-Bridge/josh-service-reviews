@@ -10,7 +10,7 @@
   "scripts": {
     "start": "nodemon server/index.js",
     "react-dev": "webpack watch",
-    "seed": "node run-seed-new.js"
+    "seed": "node seed-db-stream.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
