@@ -2,7 +2,7 @@ const Db = require('./db');
 const defaultDb = new Db();
 
 const fs = require('fs');
-const fileWriteStream = fs.createWriteStream('./sampleData/seed-data-large.csv');
+const fileWriteStream = fs.createWriteStream('./sampleData/seed-data-large-new.csv');
 
 var scriptStart = Date.now();
 
@@ -147,7 +147,7 @@ let generateReviews = async () => {
     var reviewer = 0;
     while (randomTry > randomThreshold && reviewer < shuffledReviewers.length) {
       let review = generateReview(productId, reviewId, shuffledReviewers[reviewer]);
-      let line = `${review.reviewId}, ${review.productId}, ${review.overall}, ${review.easeOfAssembly}, ${review.valueForMoney}, ${review.productQuality}, ${review.appearance}, ${review.worksAsExpected}, ${review.recommended}, ${review.title}, ${review.reviewText}, ${review.reviewerName}, ${review.reviewerId}, ${review.date} \n`;
+      let line = `${review.reviewId},${review.productId},${review.overall},${review.easeOfAssembly},${review.valueForMoney},${review.productQuality},${review.appearance},${review.worksAsExpected},${review.recommended},${review.title},${review.reviewText},${review.reviewerName},${review.reviewerId},${review.date}\n`;
       reviewId++;
       reviewer++;
       randomTry = Math.random();
