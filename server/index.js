@@ -1,9 +1,15 @@
 const express = require('express');
-const Db = require('../db');
-const db = new Db();
 const path = require('path');
 const cors = require('cors');
 const app = express();
+
+// Mongoose
+//const Db = require('../db');
+//const db = new Db();
+
+// Postgres
+const Db = require('../db/db-postgres.js');
+const db = new Db();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -49,7 +55,7 @@ app.post('/api/reviews/:itemID', (req, res, next) => {
   console.log('adding new review');
   let review = req.body;
   db.addReview(req.params.itemID, review, review => {
-    res.send(review);
+    res.send(review).status(200);
   });
 });
 
