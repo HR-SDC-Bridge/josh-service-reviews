@@ -34,8 +34,11 @@ app.get('/api/reviews/:itemID', (req, res, next) => {
 
 app.get('/api/reviews/:itemID/details', (req, res, next) => {
   console.log('about to get details');
+  var start = new Date().getTime();
   db.getReviewDetails(req.params.itemID, details => {
+    var elapsed = new Date().getTime() - start;
     res.send(details);
+    console.log(`TIME - getReview: ${elapsed} ms`);
   });
 });
 
@@ -53,9 +56,12 @@ app.get('/:productID', (req, res, next) => {
 // Add Review
 app.post('/api/reviews/:itemID', (req, res, next) => {
   console.log('adding new review');
+  var start = new Date().getTime();
   let review = req.body;
   db.addReview(req.params.itemID, review, review => {
+    var elapsed = new Date().getTime() - start;
     res.send(review).status(200);
+    console.log(`TIME - addReview: ${elapsed} ms`);
   });
 });
 

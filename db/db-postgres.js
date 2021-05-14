@@ -2,8 +2,6 @@ const fs = require('fs');
 const path = require('path');
 const { Pool } = require('pg');
 
-
-
 class Db {
 
   addReview(productId, review, callback) {
@@ -57,7 +55,7 @@ class Db {
         for (let row of res.rows) {
           console.log(row);
         }
-        callback(row);
+        callback(res.rows);
         pool.end();
       } catch (err) {
         console.log('Postgres - ran into an error');
