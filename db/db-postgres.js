@@ -8,12 +8,9 @@ class Db {
 
   addReview(productId, review, callback) {
     console.log(`Postgres - adding review for product ${productId}`);
-
     review = review[0];
 
-    // get the last reviewId number
     const query = `INSERT INTO reviews (
-      reviewId,
       productId,
       overall,
       easeOfAssembly,
@@ -29,9 +26,7 @@ class Db {
       date
       )
       VALUES
-      (
-        10000002,
-        ${productId},
+      ( ${productId},
         ${review.overall},
         ${review.easeOfAssembly},
         ${review.valueForMoney},
@@ -62,9 +57,44 @@ class Db {
         for (let row of res.rows) {
           console.log(row);
         }
+        callback(row);
         pool.end();
       } catch (err) {
         console.log('Postgres - ran into an error');
+        console.error(err);
+      }
+    })();
+  }
+
+  getReviewDetails(productId, callback) {
+    console.log('getting review details for product ' + productId);
+
+    let query = `SELECT SUM(1) AS number, AVG(overall) AS overall, AVG(easeOfAssembly) AS "easeOfAssembly", AVG(valueformoney) AS "valueForMoney", AVG(productquality) AS "productQuality", AVG(appearance) AS appearance, AVG(worksasexpected) AS "worksAsExpected" FROM reviews WHERE productid = ${productId} GROUP BY productid`;
+
+    (async () => {
+      try {
+        const pool = new Pool({
+          user: 'postgres',
+          host: 'localhost',
+          database: 'vikea',
+          password: 'hackreactor!z',
+          port: 5432,
+        });
+
+        const client = await pool.connect();
+        const res = await client.query(query);
+
+        const reviews = await client.query(`SELECT overall, easeofassembly AS "easeOfAssembly", valueformoney AS "valueForMoney", productquality AS "productQuality", appearance, worksasexpected AS "worksAsExpected", recommended, title, reviewtext AS "reviewText", reviewername AS "reviewerName", date FROM reviews WHERE productid = ${productId} LIMIT 20`);
+
+        callback({
+          itemID: Number(productId),
+          averageRatings: res.rows[0],
+          page: null,
+          customerReviews: reviews.rows
+        });
+        pool.end();
+      } catch (err) {
+        console.log('Postgres - getReviewDetails error');
         console.error(err);
       }
     })();
