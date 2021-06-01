@@ -1,3 +1,4 @@
+const newrelic = require('newrelic');
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
@@ -10,6 +11,10 @@ const app = express();
 // Postgres
 const Db = require('../db/db-postgres.js');
 const db = new Db();
+
+// Cassandra
+//const Db = require('../db/db-cassandra.js');
+//const db = new Db();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -37,7 +42,7 @@ app.get('/api/reviews/:itemID/details', (req, res, next) => {
   var start = new Date().getTime();
   db.getReviewDetails(req.params.itemID, details => {
     var elapsed = new Date().getTime() - start;
-    res.send(details);
+    res.send(details).status(200);
     console.log(`TIME - getReview: ${elapsed} ms`);
   });
 });
@@ -60,7 +65,7 @@ app.post('/api/reviews/:itemID', (req, res, next) => {
   let review = req.body;
   db.addReview(req.params.itemID, review, review => {
     var elapsed = new Date().getTime() - start;
-    res.send(review).status(200);
+    res.sendStatus(200);
     console.log(`TIME - addReview: ${elapsed} ms`);
   });
 });
