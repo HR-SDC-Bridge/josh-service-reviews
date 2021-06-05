@@ -1,4 +1,5 @@
 const newrelic = require('newrelic');
+require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
@@ -68,4 +69,6 @@ app.delete('/api/reviews/:reviewID', (req, res, next) => {
   });
 });
 
-app.listen(3000, () => console.log('listening'));
+app.listen(3000, () => {
+  console.log(`Reviews service listening`);
+});

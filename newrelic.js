@@ -1,10 +1,12 @@
 'use strict'
+require('dotenv').config();
 /**
  * New Relic agent configuration.
  *
  * See lib/config/default.js in the agent distribution for a more complete
  * description of configuration variables and their potential values.
  */
+
 exports.config = {
   /**
    * Array of application names.
@@ -13,7 +15,7 @@ exports.config = {
   /**
    * Your New Relic license key.
    */
-  license_key: 'b7a53cd4394a943896874cd3f589ce7020b4NRAL',
+  license_key: process.env.NEWRELIC,
 
   /**
    * This setting controls distributed tracing.
