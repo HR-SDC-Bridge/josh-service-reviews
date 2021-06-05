@@ -1,11 +1,26 @@
 import http from 'k6/http';
 import { check, sleep } from 'k6';
+
+const BASE_URL = 'http://localhost:3000';
+
 export let options = {
-  vus: 2,
-  duration: '30s',
+  scenarios: {
+    constant_request_rate: {
+      executor: 'constant-arrival-rate',
+      rate: 1000,
+      timeUnit: '1s',
+      duration: '30s',
+      preAllocatedVUs: 1000,
+      maxVUs: 1000,
+    },
+  },
 };
+
 export default function () {
-  let res = http.get('http://localhost:3000/api/reviews/9999999/details');
-  check(res, { 'status was 200': (r) => r.status == 200 });
-  sleep(1);
+  let responses = http.batch([
+    ['GET', `${BASE_URL}/api/reviews/9000000/details/`, null, { tags: { ctype: 'product id 9000000' } }]
+  ]);
+  check(responses[0], {
+    'product id 9000000 status was 200': (res) => res.status === 200,
+  });
 }

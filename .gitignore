@@ -30,5 +30,5 @@ nohup.out
 # Large sample data file
 sampleData/
 
-# New Relic
-newrelic.js
+# Config
+.env

@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { Pool } = require('pg');
+require('dotenv').config();
 
 class Db {
 
@@ -42,11 +43,11 @@ class Db {
     (async () => {
       try {
         const pool = new Pool({
-          user: 'postgres',
-          host: 'localhost',
-          database: 'vikea',
-          password: 'hackreactor!z',
-          port: 5432,
+          user: process.env.DB_USER,
+          host: process.env.DB_HOST,
+          database: process.env.DB_DATABASE,
+          password: process.env.DB_PASSWORD,
+          port: process.env.DB_PORT,
         });
 
         const client = await pool.connect();
@@ -55,11 +56,12 @@ class Db {
         for (let row of res.rows) {
           console.log(row);
         }
-        callback(res.rows);
-        pool.end();
+        callback(null, res.rows);
+        client.release();
       } catch (err) {
         console.log('Postgres - ran into an error');
         console.error(err);
+        callback(err, null);
       }
     })();
   }
@@ -72,11 +74,11 @@ class Db {
     (async () => {
       try {
         const pool = new Pool({
-          user: 'postgres',
-          host: 'localhost',
-          database: 'vikea',
-          password: 'hackreactor!z',
-          port: 5432,
+          user: process.env.DB_USER,
+          host: process.env.DB_HOST,
+          database: process.env.DB_DATABASE,
+          password: process.env.DB_PASSWORD,
+          port: process.env.DB_PORT,
         });
 
         const client = await pool.connect();
@@ -84,16 +86,17 @@ class Db {
 
         const reviews = await client.query(`SELECT overall, easeofassembly AS "easeOfAssembly", valueformoney AS "valueForMoney", productquality AS "productQuality", appearance, worksasexpected AS "worksAsExpected", recommended, title, reviewtext AS "reviewText", reviewername AS "reviewerName", date FROM reviews WHERE productid = ${productId} LIMIT 20`);
 
-        callback({
+        client.release();
+        callback(null, {
           itemID: Number(productId),
           averageRatings: res.rows[0],
           page: null,
           customerReviews: reviews.rows
         });
-        pool.end();
+
       } catch (err) {
-        console.log('Postgres - getReviewDetails error');
         console.error(err);
+        callback(err, null);
       }
     })();
   }
