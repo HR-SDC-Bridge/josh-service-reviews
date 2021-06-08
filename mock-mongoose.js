@@ -6,8 +6,9 @@ class Schema {
 
 const model = function (name, schema) {
   return {
-    insertMany: function () {
+    insertMany: function (records) {
       return new Promise((resolve, reject) => {
+        this.justInserted = records;
         resolve();
       });
     }
