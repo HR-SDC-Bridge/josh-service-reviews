@@ -8,6 +8,18 @@ const app = express();
 const Db = require('../db/db-postgres.js');
 const db = new Db();
 
+const redis = require('redis');
+// const client = redis.createClient({
+//     host: process.env.DB_HOST,
+//     port: process.env.DB_PORT,
+//     password: proces.env.DB_PASSWORD
+// });
+
+// client.on('error', err => {
+//     console.log('Redis Error ' + err);
+// });
+
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/../public'));

@@ -138,5 +138,5 @@ class Review extends React.Component {
   }
 }
 
-window.Review = Review;
+//window.Review = Review;
 export default Review;
