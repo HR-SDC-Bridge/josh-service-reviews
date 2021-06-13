@@ -11,14 +11,13 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        {/*<Review />*/}
-        hello everybody
         <Review />
       </div>
     );
   }
 }
 
-//ReactDOM.render(<App />, document.getElementById('app'));
-ReactDOM.render(<Review />, document.getElementById('review'));
-window.App = App;
+//export default App;
+ReactDOM.render(<App />, document.getElementById('review'));
+//ReactDOM.render(<Review />, document.getElementById('review'));
+//window.App = App;
