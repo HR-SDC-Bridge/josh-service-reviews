@@ -4,7 +4,7 @@ const DIST_DIR = path.join(__dirname, '/public');
 
 module.exports = {
   entry: `${SRC_DIR}/index.jsx`,
-  mode: 'development',
+  mode: 'production',
   output: {
     filename: 'bundle.js',
     path: DIST_DIR

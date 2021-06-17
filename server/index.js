@@ -8,22 +8,17 @@ const app = express();
 const Db = require('../db/db-postgres.js');
 const db = new Db();
 
-const redis = require('redis');
-// const client = redis.createClient({
-//     host: process.env.DB_HOST,
-//     port: process.env.DB_PORT,
-//     password: proces.env.DB_PASSWORD
-// });
-
-// client.on('error', err => {
-//     console.log('Redis Error ' + err);
-// });
-
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/../public'));
 app.use(cors());
+
+app.use('*', (req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+});
 
 app.get('/api/reviews', (req, res, next) => {
   db.getReviewSummaries(1, summaries => {
@@ -79,6 +74,12 @@ app.delete('/api/reviews/:reviewID', (req, res, next) => {
   db.deleteReview(req.params.reviewID, review => {
     res.send(review);
   });
+});
+
+process.on('SIGINT', function() {
+  console.log( "\nGracefully shutting down from SIGINT (Ctrl-C)" );
+  // some other closing procedures go here
+  process.exit(1);
 });
 
 app.listen(3000, () => {
